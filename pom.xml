@@ -51,12 +51,6 @@
           <artifactId>v-leaflet</artifactId>
           <version>0.6.0</version>
       </dependency>
-      <!-- For local testing -->
-      <dependency>
-          <groupId>hsqldb</groupId>
-          <artifactId>hsqldb</artifactId>
-          <version>1.8.0.10</version>
-      </dependency>
       <dependency>
           <groupId>net.sf.ehcache</groupId>
           <artifactId>ehcache-web</artifactId>
