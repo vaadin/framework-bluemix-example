@@ -5,7 +5,7 @@ This is an example application that shows how your can build beautiful RIA UIs f
 To build this project, just execute following commands. They include checkout, you need to have java and Maven installed:
 
 ```
-git clone https://hub.jazz.net/git/mattitahvonen/vaadin-jpa-app
+git clone https://hub.jazz.net/git/vaadin/vaadin-jpa-app
 cd vaadin-jpa-app
 mvn install
 ```
