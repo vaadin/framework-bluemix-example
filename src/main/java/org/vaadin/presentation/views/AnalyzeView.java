@@ -36,8 +36,6 @@ public class AnalyzeView extends MVerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        // ensure there is some test data
-        service.ensureTestData();
         removeAllComponents();
 
         setMargin(new MMarginInfo(false, true));

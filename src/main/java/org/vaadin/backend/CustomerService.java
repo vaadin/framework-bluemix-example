@@ -90,8 +90,10 @@ public class CustomerService {
     }
 
     public void resetTestData() {
-        entityManager.createQuery("DELETE FROM Customer c WHERE c.id > 0").
-                executeUpdate();
+        if(!findAll().isEmpty()) {
+            entityManager.createQuery("DELETE FROM Customer c WHERE c.id > 0").
+                    executeUpdate();
+        }
         ensureTestData();
     }
 

@@ -29,8 +29,6 @@ public class MapView extends MVerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        // ensure there is some test data
-        service.ensureTestData();
 
         add(new Header("Customers on map").setHeaderLevel(2));
         expand(worldMap);

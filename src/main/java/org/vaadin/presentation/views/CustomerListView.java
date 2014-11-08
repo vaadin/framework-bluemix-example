@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * A view that lists Customers in a Table and lets user to choose one for
  * editing. There is also RIA features like on the fly filtering.
  */
-@CDIView("")
+@CDIView("customers")
 @ViewMenuItem(icon = FontAwesome.USERS, order = ViewMenuItem.BEGINNING)
 public class CustomerListView extends MVerticalLayout implements View {
 
@@ -63,8 +63,6 @@ public class CustomerListView extends MVerticalLayout implements View {
 
     @PostConstruct
     public void init() {
-        // ensure there is some test data
-        service.ensureTestData();
 
         /*
          * Add value change listener to table that opens the selected book into
