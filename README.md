@@ -28,7 +28,9 @@ If you wan't to develop/debug the application locally, you'll just need to intro
 
 **The application don't build properly** 
 
-If you have [Maven](https://maven.apache.org/download.cgi) and Java 7 or later installed, the most common problem is that you are using Mac and your JAVA_HOME environment variable still points to 1.6 version of Java. An easy way to fix this is executing: ```export JAVA_HOME=`/usr/libexec/java_home -v 1.7```` and/or adding that to your *.bash_profile* file.
+If you have [Maven](https://maven.apache.org/download.cgi) and Java 7 or later installed, the most common problem is that you are using Mac and your JAVA_HOME environment variable still points to 1.6 version of Java. An easy way to fix this is executing: 
+```export JAVA_HOME=`/usr/libexec/java_home -v 1.7` ```
+and/or adding that to your .bash_profile file.
 
 Also note, that if you haven't used Maven before, the build may take several minutes on first run as Maven downloads several dependencies used by the application itself and the build.
  
