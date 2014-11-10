@@ -22,7 +22,21 @@ cf push <app-name> -p target/vaadin-jpa-application.war
 
 ### Local development
 
-If you wan't to develop/debug the application locally, you'll just need to introduce the datasource in your local WAS Liberty Profile development server and deploy it there e.g. via your favorite IDE. The app also works with e.g. in memory Derby server.
+If you want to develop/debug the application locally, you'll just need to introduce the datasource in your local WAS Liberty Profile development server and deploy it there e.g. via your favorite IDE. Virtually any DB works, so if you are e.g. using Mac as you development environment, and can't start DB2, you can still debug the application locally. E.g. an in memory Derby server works just fine, simple instructions below.
+
+* Download and place a derby jar file to usr/shared/resources/derby/derby.jar into your Liberty server directory.
+* Place following configuration snippet into your development server.xml (most likely usr/servers/defaultServer/server.xml in your Liberty server directory):
+```
+  <!--  JDBC Driver configuration -->
+  <jdbcDriver id="DerbyEmbedded" libraryRef="DerbyLib" />
+  <library id="DerbyLib" filesetRef="DerbyFileset" />
+  <fileset id="DerbyFileset" dir="${shared.resource.dir}/derby" includes="derby.jar" />
+  <!-- Configure an in-memory db for the vaadin app configuration -->
+  <dataSource id="jdbc/vaadindb" jndiName="jdbc/vaadindb" jdbcDriverRef="DerbyEmbedded" transactional="true">
+    <properties databaseName="memory:jpasampledatabase" createDatabase="create" />
+  </dataSource>
+```
+
 
 ### Troubleshooting
 
