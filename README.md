@@ -24,7 +24,7 @@ cf push <app-name> -p target/vaadin-jpa-application.war
 
 ### Local development
 
-If you want to develop/debug the application locally, you'll just need to introduce the datasource in your local WAS Liberty Profile development server and deploy it there e.g. via your favorite IDE. Virtually any DB works, so if you are e.g. using Mac as you development environment, and can't start DB2, you can still debug the application locally. E.g. an in memory Derby server works just fine, simple instructions below.
+If you want to develop/debug the application locally, you'll just need to introduce the data source in your local WAS Liberty Profile development server and deploy it there e.g. via your favorite IDE. Virtually any DB works, so if you are e.g. using Mac as you development environment, and can't start DB2, you can still debug the application locally. E.g. an in memory Derby server works just fine, simple instructions below.
 
 * Download and place a derby jar file to usr/shared/resources/derby/derby.jar into your Liberty server directory.
 * Place following configuration snippet into your development server.xml (most likely usr/servers/defaultServer/server.xml in your Liberty server directory):
@@ -52,4 +52,4 @@ Also note, that if you haven't used Maven before, the build may take several min
  
 **The deployment fails**
 
-Deploying and setting up the database may take a while with a slow network connection, so be patient. In some cases there might happen an error due to e.g. network communication. Cancelling the deployment with CTRL-C and trying again usually fixes the issue.
+Deploying and setting up the database may take a while with a slow network connection, so be patient. In some cases there might happen an error due to e.g. network communication. Canceling the deployment with CTRL-C and trying again usually fixes the issue.
