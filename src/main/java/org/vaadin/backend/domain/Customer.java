@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
+import javax.validation.constraints.Size;
 
 /**
  * A standard JPA entity, like in any other Java application.
@@ -41,6 +42,7 @@ public class Customer implements Serializable {
     @Pattern(regexp = ".+@.+\\.[a-z]+", message = "Must be valid email")
     private String email;
 
+    @Lob
     private Point location;
 
     public int getId() {
