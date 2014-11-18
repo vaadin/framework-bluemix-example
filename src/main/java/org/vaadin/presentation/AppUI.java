@@ -27,7 +27,6 @@ import org.vaadin.cdiviewmenu.ViewMenuUI;
 @Widgetset("AppWidgetset")
 public class AppUI extends ViewMenuUI {
 
-
     /**
      * @return the currently active UI instance with correct type.
      */

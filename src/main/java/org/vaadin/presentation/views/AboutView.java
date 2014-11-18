@@ -10,6 +10,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.backend.CustomerService;
 import org.vaadin.cdiviewmenu.ViewMenuItem;
+import org.vaadin.cdiviewmenu.ViewMenuUI;
 import org.vaadin.maddon.label.RichText;
 import org.vaadin.maddon.layouts.MVerticalLayout;
 
@@ -38,7 +39,7 @@ public class AboutView extends MVerticalLayout implements View {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 service.resetTestData();
-                getUI().getNavigator().navigateTo("customers");
+                ViewMenuUI.getMenu().navigateTo(CustomerListView.class);
             }
         });
         button.setStyleName(ValoTheme.BUTTON_LARGE);
