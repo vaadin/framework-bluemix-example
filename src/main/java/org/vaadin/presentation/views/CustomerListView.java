@@ -42,10 +42,10 @@ public class CustomerListView extends MVerticalLayout implements View {
     CustomerForm customerEditor;
 
     // Introduce and configure some UI components used on this view
-    MTable<Customer> bookTable = new MTable(Customer.class).withFullWidth().
+    MTable<Customer> customerTable = new MTable(Customer.class).withFullWidth().
             withFullHeight();
 
-    MHorizontalLayout mainContent = new MHorizontalLayout(bookTable).
+    MHorizontalLayout mainContent = new MHorizontalLayout(customerTable).
             withFullWidth().withMargin(false);
 
     TextField filter = new TextField();
@@ -57,7 +57,7 @@ public class CustomerListView extends MVerticalLayout implements View {
 
                 @Override
                 public void buttonClick(Button.ClickEvent event) {
-                    addBook();
+                    addCustomer();
                 }
             });
 
@@ -65,14 +65,14 @@ public class CustomerListView extends MVerticalLayout implements View {
     public void init() {
 
         /*
-         * Add value change listener to table that opens the selected book into
+         * Add value change listener to table that opens the selected customer into
          * an editor.
          */
-        bookTable.addMValueChangeListener(new MValueChangeListener<Customer>() {
+        customerTable.addMValueChangeListener(new MValueChangeListener<Customer>() {
 
             @Override
             public void valueChange(MValueChangeEvent<Customer> event) {
-                editBook(event.getValue());
+                editCustomer(event.getValue());
             }
         });
 
@@ -86,7 +86,7 @@ public class CustomerListView extends MVerticalLayout implements View {
         filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
             @Override
             public void textChange(FieldEvents.TextChangeEvent textChangeEvent) {
-                listBook(textChangeEvent.getText());
+                listCustomers(textChangeEvent.getText());
             }
         });
 
@@ -109,7 +109,7 @@ public class CustomerListView extends MVerticalLayout implements View {
                             }
                 });
 
-        listBooks();
+        listCustomers();
     }
 
     /**
@@ -154,14 +154,14 @@ public class CustomerListView extends MVerticalLayout implements View {
      */
     private void adjustTableColumns() {
         if (ScreenSize.getScreenSize() == ScreenSize.LARGE) {
-            bookTable.setVisibleColumns("firstName", "lastName", "email",
+            customerTable.setVisibleColumns("firstName", "lastName", "email",
                     "status");
-            bookTable.setColumnHeaders("First name", "Last name", "Email",
+            customerTable.setColumnHeaders("First name", "Last name", "Email",
                     "Status");
         } else {
             // Only show one (generated) column with combined first + last name
-            if (bookTable.getColumnGenerator("name") == null) {
-                bookTable.addGeneratedColumn("name",
+            if (customerTable.getColumnGenerator("name") == null) {
+                customerTable.addGeneratedColumn("name",
                         new Table.ColumnGenerator() {
                             @Override
                             public Object generateCell(Table table, Object o,
@@ -172,11 +172,11 @@ public class CustomerListView extends MVerticalLayout implements View {
                         });
             }
             if (ScreenSize.getScreenSize() == ScreenSize.MEDIUM) {
-                bookTable.setVisibleColumns("name", "email");
-                bookTable.setColumnHeaders("Name", "Email");
+                customerTable.setVisibleColumns("name", "email");
+                customerTable.setColumnHeaders("Name", "Email");
             } else {
-                bookTable.setVisibleColumns("name");
-                bookTable.setColumnHeaders("Name");
+                customerTable.setVisibleColumns("name");
+                customerTable.setColumnHeaders("Name");
             }
         }
     }
@@ -187,28 +187,28 @@ public class CustomerListView extends MVerticalLayout implements View {
     // In a big project, consider using separate controller/presenter
     // for improved testability. MVP is a popular pattern for large
     // Vaadin applications.
-    private void listBooks() {
+    private void listCustomers() {
         // Here we just fetch data straight from the EJB.
         //
         // If you expect a huge amount of data, do proper paging,
         // or use lazy loading Vaadin Container like LazyQueryContainer
         // See: https://vaadin.com/directory#addon/lazy-query-container:vaadin
-        bookTable.setBeans(new ArrayList<>(service.findAll()));
+        customerTable.setBeans(new ArrayList<>(service.findAll()));
     }
 
-    private void listBook(String filterString) {
-        bookTable.setBeans(new ArrayList<>(service.findByName(filterString)));
+    private void listCustomers(String filterString) {
+        customerTable.setBeans(new ArrayList<>(service.findByName(filterString)));
     }
 
-    void editBook(Customer book) {
-        if (book != null) {
-            openEditor(book);
+    void editCustomer(Customer customer) {
+        if (customer != null) {
+            openEditor(customer);
         } else {
             closeEditor();
         }
     }
 
-    void addBook() {
+    void addCustomer() {
         openEditor(new Customer());
     }
 
@@ -241,19 +241,19 @@ public class CustomerListView extends MVerticalLayout implements View {
      * example events are arised from CustomerForm. The CDI event system
      * is a great mechanism to decouple components.
      */
-    void saveBook(@Observes @CustomerEvent(Type.SAVE) Customer book) {
-        listBooks();
+    void saveCustomer(@Observes @CustomerEvent(Type.SAVE) Customer customer) {
+        listCustomers();
         closeEditor();
     }
 
-    void resetBook(@Observes @CustomerEvent(Type.REFRESH) Customer book) {
-        listBooks();
+    void resetCustomer(@Observes @CustomerEvent(Type.REFRESH) Customer customer) {
+        listCustomers();
         closeEditor();
     }
 
-    void deleteBook(@Observes @CustomerEvent(Type.DELETE) Customer book) {
+    void deleteCustomer(@Observes @CustomerEvent(Type.DELETE) Customer customer) {
         closeEditor();
-        listBooks();
+        listCustomers();
     }
 
     @Override
