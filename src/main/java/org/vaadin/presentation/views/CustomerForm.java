@@ -71,7 +71,7 @@ public class CustomerForm extends AbstractForm<Customer> {
 
     @PostConstruct
     void init() {
-        setEagarValidation(true);
+        setEagerValidation(true);
         status.setWidthUndefined();
         status.setOptions(CustomerStatus.values());
         gender.addItems((Object[]) Gender.values());
