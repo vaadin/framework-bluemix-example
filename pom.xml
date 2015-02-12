@@ -11,7 +11,7 @@
   
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.3.7</vaadin.version>
+        <vaadin.version>7.3.10</vaadin.version>
     </properties>
   
     <dependencies>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>org.vaadin</groupId>
             <artifactId>cdi-helpers</artifactId>
-            <version>1.5</version>
+            <version>1.8</version>
         </dependency>
       
         <dependency>
@@ -114,6 +114,43 @@
             </plugin>
         </plugins>
 
+        <pluginManagement>
+        	<plugins>
+        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        		<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+        				<lifecycleMappingMetadata>
+        					<pluginExecutions>
+        						<pluginExecution>
+        							<pluginExecutionFilter>
+        								<groupId>com.vaadin</groupId>
+        								<artifactId>
+        									vaadin-maven-plugin
+        								</artifactId>
+        								<versionRange>
+        									[7.3.10,)
+        								</versionRange>
+        								<goals>
+        									<goal>
+        										update-widgetset
+        									</goal>
+        									<goal>resources</goal>
+        									<goal>update-theme</goal>
+        								</goals>
+        							</pluginExecutionFilter>
+        							<action>
+        								<ignore></ignore>
+        							</action>
+        						</pluginExecution>
+        					</pluginExecutions>
+        				</lifecycleMappingMetadata>
+        			</configuration>
+        		</plugin>
+        	</plugins>
+        </pluginManagement>
     </build>
 
     <repositories>

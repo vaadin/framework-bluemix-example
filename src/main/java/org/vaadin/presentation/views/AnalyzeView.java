@@ -1,27 +1,42 @@
 package org.vaadin.presentation.views;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.vaadin.backend.CustomerService;
+import org.vaadin.backend.domain.Customer;
+import org.vaadin.backend.domain.CustomerStatus;
+import org.vaadin.backend.domain.Gender;
+import org.vaadin.cdiviewmenu.ViewMenuItem;
+import org.vaadin.presentation.ScreenSize;
+import org.vaadin.viritin.label.Header;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
+import org.vaadin.viritin.layouts.MMarginInfo;
+import org.vaadin.viritin.layouts.MVerticalLayout;
+
 import com.vaadin.addon.charts.Chart;
-import com.vaadin.addon.charts.model.*;
+import com.vaadin.addon.charts.model.ChartType;
+import com.vaadin.addon.charts.model.Configuration;
+import com.vaadin.addon.charts.model.DataSeries;
+import com.vaadin.addon.charts.model.DataSeriesItem;
+import com.vaadin.addon.charts.model.HorizontalAlign;
+import com.vaadin.addon.charts.model.Labels;
+import com.vaadin.addon.charts.model.Legend;
+import com.vaadin.addon.charts.model.ListSeries;
+import com.vaadin.addon.charts.model.PlotOptionsColumn;
+import com.vaadin.addon.charts.model.PlotOptionsFunnel;
+import com.vaadin.addon.charts.model.PlotOptionsPie;
+import com.vaadin.addon.charts.model.Stacking;
+import com.vaadin.addon.charts.model.VerticalAlign;
+import com.vaadin.addon.charts.model.XAxis;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
-import org.vaadin.backend.CustomerService;
-import org.vaadin.backend.domain.Customer;
-import org.vaadin.backend.domain.CustomerStatus;
-import org.vaadin.backend.domain.Gender;
-import org.vaadin.cdiviewmenu.ViewMenuItem;
-import org.vaadin.maddon.label.Header;
-import org.vaadin.maddon.layouts.MHorizontalLayout;
-import org.vaadin.maddon.layouts.MMarginInfo;
-import org.vaadin.maddon.layouts.MVerticalLayout;
-import org.vaadin.presentation.ScreenSize;
-
-import javax.inject.Inject;
-import java.util.Date;
-import java.util.List;
 
 /**
  * An example view that just make some simple analysis for the data and displays

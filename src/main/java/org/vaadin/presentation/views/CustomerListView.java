@@ -1,5 +1,25 @@
 package org.vaadin.presentation.views;
 
+import java.util.ArrayList;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import org.vaadin.backend.CustomerService;
+import org.vaadin.backend.domain.Customer;
+import org.vaadin.cdiviewmenu.ViewMenuItem;
+import org.vaadin.presentation.AppUI;
+import org.vaadin.presentation.ScreenSize;
+import org.vaadin.presentation.views.CustomerEvent.Type;
+import org.vaadin.viritin.button.MButton;
+import org.vaadin.viritin.fields.MTable;
+import org.vaadin.viritin.fields.MValueChangeEvent;
+import org.vaadin.viritin.fields.MValueChangeListener;
+import org.vaadin.viritin.label.Header;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
+import org.vaadin.viritin.layouts.MVerticalLayout;
+
 import com.vaadin.cdi.CDIView;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.navigator.View;
@@ -7,25 +27,11 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.*;
-import org.vaadin.backend.CustomerService;
-import org.vaadin.backend.domain.Customer;
-import org.vaadin.cdiviewmenu.ViewMenuItem;
-import org.vaadin.maddon.button.MButton;
-import org.vaadin.maddon.fields.MTable;
-import org.vaadin.maddon.fields.MValueChangeEvent;
-import org.vaadin.maddon.fields.MValueChangeListener;
-import org.vaadin.maddon.label.Header;
-import org.vaadin.maddon.layouts.MHorizontalLayout;
-import org.vaadin.maddon.layouts.MVerticalLayout;
-import org.vaadin.presentation.AppUI;
-import org.vaadin.presentation.views.CustomerEvent.Type;
-import org.vaadin.presentation.ScreenSize;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import java.util.ArrayList;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 
 /**
  * A view that lists Customers in a Table and lets user to choose one for

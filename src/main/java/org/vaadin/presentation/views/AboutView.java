@@ -1,5 +1,14 @@
 package org.vaadin.presentation.views;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.vaadin.backend.CustomerService;
+import org.vaadin.cdiviewmenu.ViewMenuItem;
+import org.vaadin.cdiviewmenu.ViewMenuUI;
+import org.vaadin.viritin.label.RichText;
+import org.vaadin.viritin.layouts.MVerticalLayout;
+
 import com.vaadin.cdi.CDIView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -8,14 +17,6 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.themes.ValoTheme;
-import org.vaadin.backend.CustomerService;
-import org.vaadin.cdiviewmenu.ViewMenuItem;
-import org.vaadin.cdiviewmenu.ViewMenuUI;
-import org.vaadin.maddon.label.RichText;
-import org.vaadin.maddon.layouts.MVerticalLayout;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 /*
  * A very simple view that just displays an "about text". The view also has 

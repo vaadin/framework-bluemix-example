@@ -1,22 +1,27 @@
 package org.vaadin.presentation.views;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.vaadin.addon.leaflet.LMap;
+import org.vaadin.addon.leaflet.LMarker;
+import org.vaadin.addon.leaflet.LOpenStreetMapLayer;
+import org.vaadin.addon.leaflet.LeafletClickEvent;
+import org.vaadin.addon.leaflet.LeafletClickListener;
+import org.vaadin.addon.leaflet.control.LZoom;
+import org.vaadin.addon.leaflet.shared.ControlPosition;
+import org.vaadin.backend.CustomerService;
+import org.vaadin.backend.domain.Customer;
+import org.vaadin.cdiviewmenu.ViewMenuItem;
+import org.vaadin.viritin.label.Header;
+import org.vaadin.viritin.layouts.MVerticalLayout;
+
 import com.vaadin.cdi.CDIView;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Notification;
-import org.vaadin.addon.leaflet.*;
-import org.vaadin.addon.leaflet.control.LZoom;
-import org.vaadin.addon.leaflet.shared.ControlPosition;
-import org.vaadin.backend.CustomerService;
-import org.vaadin.backend.domain.Customer;
-import org.vaadin.cdiviewmenu.ViewMenuItem;
-import org.vaadin.maddon.label.Header;
-import org.vaadin.maddon.layouts.MVerticalLayout;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 @CDIView("map")
 @ViewMenuItem(icon = FontAwesome.GLOBE, order = 1)

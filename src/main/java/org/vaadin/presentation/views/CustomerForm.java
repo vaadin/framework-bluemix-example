@@ -1,20 +1,17 @@
 package org.vaadin.presentation.views;
 
-import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.backend.CustomerService;
 import org.vaadin.backend.domain.Customer;
 import org.vaadin.backend.domain.CustomerStatus;
 import org.vaadin.backend.domain.Gender;
-import org.vaadin.maddon.button.MButton;
-import org.vaadin.maddon.fields.MTextField;
-import org.vaadin.maddon.fields.TypedSelect;
-import org.vaadin.maddon.form.AbstractForm;
-import org.vaadin.maddon.label.Header;
-import org.vaadin.maddon.layouts.MFormLayout;
-import org.vaadin.maddon.layouts.MMarginInfo;
-import org.vaadin.maddon.layouts.MVerticalLayout;
+import org.vaadin.viritin.fields.MTextField;
+import org.vaadin.viritin.fields.TypedSelect;
+import org.vaadin.viritin.form.AbstractForm;
+import org.vaadin.viritin.label.Header;
+import org.vaadin.viritin.layouts.MFormLayout;
+import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
@@ -47,8 +44,6 @@ public class CustomerForm extends AbstractForm<Customer> {
             withCaption("Status");
     OptionGroup gender = new OptionGroup("Gender");
     TextField email = new MTextField("Email").withFullWidth();
-
-    Button deleteButton = new MButton(FontAwesome.TRASH_O);
 
     @Override
     protected Component createContent() {
@@ -105,10 +100,9 @@ public class CustomerForm extends AbstractForm<Customer> {
                 refrehsEvent.fire(entity);
             }
         });
-        deleteButton.addClickListener(new Button.ClickListener() {
-
+        setDeleteHandler(new DeleteHandler<Customer>() {
             @Override
-            public void buttonClick(Button.ClickEvent event) {
+            public void onDelete(Customer entity) {
                 service.deleteEntity(getEntity());
                 deleteEvent.fire(getEntity());
             }
@@ -116,24 +110,10 @@ public class CustomerForm extends AbstractForm<Customer> {
     }
 
     @Override
-    public HorizontalLayout getToolbar() {
-        HorizontalLayout toolbar = super.getToolbar();
-        toolbar.setMargin(new MMarginInfo(true, false));
-        // Configure the form to show delete button for already persisted
-        // entities only
-        if (getEntity().isPersisted()) {
-            toolbar.setWidth("100%");
-            toolbar.addComponent(deleteButton);
-            toolbar.setExpandRatio(deleteButton, 1);
-            toolbar.setComponentAlignment(deleteButton, Alignment.TOP_RIGHT);
-        }
-        return toolbar;
-    }
-
-    @Override
     protected void adjustResetButtonState() {
         // always enabled in this form
         getResetButton().setEnabled(true);
+        getDeleteButton().setEnabled(getEntity() != null && getEntity().isPersisted());
     }
 
     /* "CDI interface" to notify decoupled components. Using traditional API to
