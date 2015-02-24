@@ -26,19 +26,37 @@ cf push <app-name> -p target/vaadin-jpa-application.war
 
 If you want to develop/debug the application locally, you'll just need to introduce the data source in your local WAS Liberty Profile development server and deploy it there e.g. via your favorite IDE. Virtually any DB works, so if you are e.g. using Mac as you development environment, and can't start DB2, you can still debug the application locally. E.g. an in memory Derby server works just fine, simple instructions below.
 
-* Download and place a derby jar file to usr/shared/resources/derby/derby.jar into your Liberty server directory.
-* Place following configuration snippet into your development server.xml (most likely usr/servers/defaultServer/server.xml in your Liberty server directory):
+* Download and place a derby.jar file to usr/shared/resources/derby/derby.jar into your Liberty server directory.
+* Enable required features and a Derby based datasource by configuring your development server's server.xml (most likely usr/servers/defaultServer/server.xml in your Liberty server directory). It could look like this:
 ```
-  <!--  JDBC Driver configuration -->
-  <jdbcDriver id="DerbyEmbedded" libraryRef="DerbyLib" />
-  <library id="DerbyLib" filesetRef="DerbyFileset" />
-  <fileset id="DerbyFileset" dir="${shared.resource.dir}/derby" includes="derby.jar" />
+<server description="new server">
+  <!-- Enable features, jpa-2.0, cdi-1.0 and servlet-3.0 are required, but handier to just
+       enable the whole webProfile specification -->
+  <featureManager>
+    <feature>localConnector-1.0</feature>
+    <feature>webProfile-6.0</feature>
+  </featureManager>
+  <!-- To access this server from a remote client add a host attribute to 
+		the following element, e.g. host="*" -->
+  <httpEndpoint httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+  <!-- JDBC Driver configuration -->
+  <jdbcDriver id="DerbyEmbedded" libraryRef="DerbyLib"/>
+  <library filesetRef="DerbyFileset" id="DerbyLib"/>
+  <fileset dir="${shared.resource.dir}/derby" id="DerbyFileset" includes="derby.jar"/>
   <!-- Configure an in-memory db for the vaadin app configuration -->
-  <dataSource id="jdbc/vaadindb" jndiName="jdbc/vaadindb" jdbcDriverRef="DerbyEmbedded" transactional="true">
-    <properties databaseName="memory:jpasampledatabase" createDatabase="create" />
+  <dataSource id="jdbc/vaadindb" jdbcDriverRef="DerbyEmbedded" jndiName="jdbc/vaadindb" transactional="true">
+    <properties createDatabase="create" databaseName="memory:jpasampledatabase"/>
   </dataSource>
+</server>
 ```
 
+If you are using Eclipse, it might be bit picky about configuring the project properly based on the pom.xml. Via IntelliJ the deployment works usually easier. Couple of Eclipse related tips to setup the project:
+ 
+ * Import to your workspace using File->Import->Maven->Existing Maven project
+ * If Eclipse creates an "ear project" in addition to the war project, you can just delete the ear project
+ * Make one full build with "Run as-> Maven install" after import to get client side resources prepared
+ * In case Eclipse asks to modify server.xml during deployment, just ignore it. For some reason Eclipse may "detect" that project needs services it really don't need. webProfile-6.0 in server xml (and a connector) is enough.
+ * In case it still don't work, get a fresh Eclipse, install only latest Liberty Profile plugins and try again. Some Eclipse plugins may disturb the process.
 
 ### Troubleshooting
 
