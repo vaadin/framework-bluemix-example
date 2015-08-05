@@ -7,5 +7,6 @@ applications:
 - name: vaadinApp
   instances: 1
   memory: 512M
+  path: target/vaadin-jpa-application.war
   services:
     - vaadin-sqldb
