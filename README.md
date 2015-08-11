@@ -6,6 +6,8 @@ This is an example application that shows how your can build rich UIs for your B
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy)
 
+Clicking the above button will clone the project to your account and set up a devops chain that will deploy the project to Bluemix.
+
 ### Manual deployment to Bluemix
 
 Before you start, make sure you have Java SDK 1.7 (or higher) and Maven installed. Also [install cloudfoundry command line tools](https://www.ng.bluemix.net/docs/#cli/index.html#cli) and configure them for Bluemix.
