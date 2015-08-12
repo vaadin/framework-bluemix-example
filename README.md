@@ -6,7 +6,7 @@ This is an example application that shows how your can build rich UIs for your B
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy)
 
-Clicking the above button will clone the project to your account and set up a devops chain that will deploy the project to Bluemix.
+When you click this button, Bluemix will clone this repository, compile the application, create the necessary database service (see `manifest.yml` file) and then push the application.
 
 ### Manual deployment to Bluemix
 
@@ -24,8 +24,9 @@ or execute the same goal via your IDE.
 
 In Bluemix you need to prepare an execution environment, that provides a Java EE 6 server and a database mapped to "jdbc/vaadindb". The easiest way to accomplish this, is to is to use the Vaadin boilerplate provided from within the Bluemix Catalog. Just follow the "}>" logo in [Bluemix](http://bluemix.net/) catalog. Manually, you can create an SQLDB service with the name "vaadindb". Naturally you can also use a different name, but then you'll need to modify persistence.xml in src/main/resources/META-INF accordingly.
 
-Once you have the execution environment ready, just issue the following command. If you haven't used cloudfoundry command line tools before, a full tutorial personalized for your account and application can be found from "VIEW QUICK START" in the BlueMix dashboard.
+Once you have the execution environment ready, *DELETE* the `manifest.yml` file and push the application to Bluemix. Replace <app-name> with the name of the Bluemix execution environment you created in the previous step.
 ```
+rm manifest.yml
 cf push <app-name> -p target/vaadin-jpa-application.war
 ```
 ... and you have your first Vaadin app deployed to Bluemix!
