@@ -6,7 +6,7 @@ This is an example application that shows how your can build rich UIs for your B
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy)
 
-When you click this button, Bluemix will clone this repository, compile the application, create the necessary database service (see `manifest.yml` file) and then push the application.
+When you click this button, Bluemix will clone this repository to a private Bluemix DevOps Services project, create a pipeline to compile the source, create the necessary database service (see `manifest.yml`) and then push the application.
 
 ### Manual deployment to Bluemix
 
