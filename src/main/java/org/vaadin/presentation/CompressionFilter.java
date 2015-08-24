@@ -5,12 +5,12 @@ import net.sf.ehcache.constructs.web.filter.GzipFilter;
 import javax.servlet.annotation.WebFilter;
 
 /**
- * As we are not using CDN for this simple app, it is a
- * good idea to use GZIP compression to keep loading time
- * and bandwidth usage to minimum. This is optional though.
+ * It is a good idea to use GZIP compression for client-server traffic. This can
+ * be done in front proxy or with an application specific solution like here.
+ * This is optional though.
  *
  */
-@WebFilter({"*.js", "*.css", "/UIDL/*"})
+@WebFilter("/UIDL/*")
 public class CompressionFilter extends GzipFilter {
 
     public CompressionFilter() {
