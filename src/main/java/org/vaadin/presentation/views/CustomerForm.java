@@ -15,6 +15,7 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 /**
@@ -29,6 +30,7 @@ import javax.inject.Inject;
  * how they automatically reflect to the configuration of related fields in UI.
  * </p>
  */
+@Dependent
 public class CustomerForm extends AbstractForm<Customer> {
 
     @Inject
