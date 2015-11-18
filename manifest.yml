@@ -2,7 +2,7 @@
 declared-services:
   simplecrm-sqldb:
     label: sqldb
-    plan: sqldb_small
+    plan: sqldb_free
 applications:
 - name: vaadinApp
   instances: 1
