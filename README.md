@@ -8,7 +8,7 @@ This is an example application that shows how your can build rich UIs for your B
 
 When you click this button, Bluemix will clone this repository to a private Bluemix DevOps Services project, create a pipeline to compile the source, create the necessary database service (see `manifest.yml`) and then push the application.
 
-To continue developing your app, clone the repository from the hub.jazz.net and just commit your changes. Commit triggers a new build by the DevOps chain and deploys a new version of your app.
+To continue developing your app, clone the repository that was created for you from the hub.jazz.net and then just commit and push your changes. Commit triggers a new build by the DevOps chain and deploys a new version of your app.
 
 ### Manual deployment to Bluemix
 
