@@ -1,12 +1,12 @@
 ---
 declared-services:
-  simplecrm-sqldb:
-    label: sqldb
-    plan: sqldb_free
+  vaadindb:
+    label: elephantsql
+    plan: turtle
 applications:
 - name: vaadinApp
   instances: 1
   memory: 512M
   path: target/vaadin-jpa-application.war
   services:
-    - simplecrm-sqldb
+    - vaadindb
