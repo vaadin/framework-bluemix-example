@@ -95,10 +95,19 @@ public class CustomerForm extends AbstractForm<Customer> {
                 }
             }
         });
-        setResetHandler(refrehsEvent::fire);
-        setDeleteHandler(entity -> {
-            service.deleteEntity(entity);
-            deleteEvent.fire(entity);
+        setResetHandler(new ResetHandler<Customer>() {
+
+            @Override
+            public void onReset(Customer entity) {
+                refrehsEvent.fire(entity);
+            }
+        });
+        setDeleteHandler(new DeleteHandler<Customer>() {
+            @Override
+            public void onDelete(Customer entity) {
+                service.deleteEntity(getEntity());
+                deleteEvent.fire(getEntity());
+            }
         });
     }
 

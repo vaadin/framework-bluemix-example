@@ -36,9 +36,12 @@ public class AboutView extends MVerticalLayout implements View {
         int records = service.findAll().size();
         add(new Label("There are " + records + " records in the DB."));
 
-        Button button = new Button("Fill test data into DB", e -> {
-            service.resetTestData();
-            ViewMenuUI.getMenu().navigateTo(CustomerListView.class);
+        Button button = new Button("Fill test data into DB", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                service.resetTestData();
+                ViewMenuUI.getMenu().navigateTo(CustomerListView.class);
+            }
         });
         button.setStyleName(ValoTheme.BUTTON_LARGE);
         button.addStyleName(ValoTheme.BUTTON_PRIMARY);

@@ -58,7 +58,14 @@ public class CustomerListView extends MVerticalLayout implements View {
 
     Header header = new Header("Customers").setHeaderLevel(2);
 
-    Button addButton = new MButton(FontAwesome.EDIT, e -> addCustomer());
+    Button addButton = new MButton(FontAwesome.EDIT,
+            new Button.ClickListener() {
+
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    addCustomer();
+                }
+            });
 
     @PostConstruct
     public void init() {
@@ -67,8 +74,12 @@ public class CustomerListView extends MVerticalLayout implements View {
          * Add value change listener to table that opens the selected customer into
          * an editor.
          */
-        customerTable.addMValueChangeListener(event -> {
-            editCustomer(event.getValue());
+        customerTable.addMValueChangeListener(new MValueChangeListener<Customer>() {
+
+            @Override
+            public void valueChange(MValueChangeEvent<Customer> event) {
+                editCustomer(event.getValue());
+            }
         });
 
         /*
@@ -78,8 +89,11 @@ public class CustomerListView extends MVerticalLayout implements View {
          * while typing or hits enter.
          * */
         filter.setInputPrompt("Filter customers...");
-        filter.addTextChangeListener(textChangeEvent -> {
-            listCustomers(textChangeEvent.getText());
+        filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
+            @Override
+            public void textChange(FieldEvents.TextChangeEvent textChangeEvent) {
+                listCustomers(textChangeEvent.getText());
+            }
         });
 
 
@@ -91,10 +105,15 @@ public class CustomerListView extends MVerticalLayout implements View {
         /* If you wish the UI to adapt on window resize/page orientation
          * change, hook to BrowserWindowResizeEvent */
         UI.getCurrent().setResizeLazy(true);
-        Page.getCurrent().addBrowserWindowResizeListener(event -> {
-            adjustTableColumns();
-            layout();
-        });
+        Page.getCurrent().addBrowserWindowResizeListener(
+                new Page.BrowserWindowResizeListener() {
+                    @Override
+                    public void browserWindowResized(
+                            Page.BrowserWindowResizeEvent browserWindowResizeEvent) {
+                                adjustTableColumns();
+                                layout();
+                            }
+                });
 
         listCustomers();
     }
@@ -178,19 +197,13 @@ public class CustomerListView extends MVerticalLayout implements View {
         // Here we just fetch data straight from the EJB.
         //
         // If you expect a huge amount of data, do proper paging,
-        // or use lazy loading.
-        // See: https://github.com/viritin/viritin/wiki/Lazy-loading-in-Viritin
-        if(filter.getValue() == null) {
-            customerTable.setBeans(new ArrayList<>(service.findAll()));
-            customerTable.sort();
-        } else {
-            listCustomers(filter.getValue());
-        }
+        // or use lazy loading Vaadin Container like LazyQueryContainer
+        // See: https://vaadin.com/directory#addon/lazy-query-container:vaadin
+        customerTable.setBeans(new ArrayList<>(service.findAll()));
     }
 
     private void listCustomers(String filterString) {
         customerTable.setBeans(new ArrayList<>(service.findByName(filterString)));
-        customerTable.sort();
     }
 
     void editCustomer(Customer customer) {
