@@ -197,13 +197,19 @@ public class CustomerListView extends MVerticalLayout implements View {
         // Here we just fetch data straight from the EJB.
         //
         // If you expect a huge amount of data, do proper paging,
-        // or use lazy loading Vaadin Container like LazyQueryContainer
-        // See: https://vaadin.com/directory#addon/lazy-query-container:vaadin
-        customerTable.setBeans(new ArrayList<>(service.findAll()));
+        // or use lazy loading.
+        // See: https://github.com/viritin/viritin/wiki/Lazy-loading-in-Viritin
+        if(filter.getValue() == null) {
+            customerTable.setBeans(new ArrayList<>(service.findAll()));
+            customerTable.sort();
+        } else {
+            listCustomers(filter.getValue());
+        }
     }
 
     private void listCustomers(String filterString) {
         customerTable.setBeans(new ArrayList<>(service.findByName(filterString)));
+        customerTable.sort();
     }
 
     void editCustomer(Customer customer) {
