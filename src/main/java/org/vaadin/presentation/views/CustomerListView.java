@@ -13,23 +13,20 @@ import org.vaadin.presentation.AppUI;
 import org.vaadin.presentation.ScreenSize;
 import org.vaadin.presentation.views.CustomerEvent.Type;
 import org.vaadin.viritin.button.MButton;
-import org.vaadin.viritin.fields.MTable;
-import org.vaadin.viritin.fields.MValueChangeEvent;
-import org.vaadin.viritin.fields.MValueChangeListener;
 import org.vaadin.viritin.label.Header;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import com.vaadin.cdi.CDIView;
-import com.vaadin.event.FieldEvents;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 
@@ -48,11 +45,10 @@ public class CustomerListView extends MVerticalLayout implements View {
     CustomerForm customerEditor;
 
     // Introduce and configure some UI components used on this view
-    MTable<Customer> customerTable = new MTable(Customer.class).withFullWidth().
-            withFullHeight();
+    Grid<Customer> customerListing = new Grid(Customer.class);
 
-    MHorizontalLayout mainContent = new MHorizontalLayout(customerTable).
-            withFullWidth().withMargin(false);
+    MHorizontalLayout mainContent = new MHorizontalLayout().
+            withFullWidth().withMargin(false).expand(customerListing);
 
     TextField filter = new TextField();
 
@@ -61,11 +57,11 @@ public class CustomerListView extends MVerticalLayout implements View {
     Button addButton = new MButton(FontAwesome.EDIT,
             new Button.ClickListener() {
 
-                @Override
-                public void buttonClick(Button.ClickEvent event) {
-                    addCustomer();
-                }
-            });
+        @Override
+        public void buttonClick(Button.ClickEvent event) {
+            addCustomer();
+        }
+    });
 
     @PostConstruct
     public void init() {
@@ -74,13 +70,11 @@ public class CustomerListView extends MVerticalLayout implements View {
          * Add value change listener to table that opens the selected customer into
          * an editor.
          */
-        customerTable.addMValueChangeListener(new MValueChangeListener<Customer>() {
-
-            @Override
-            public void valueChange(MValueChangeEvent<Customer> event) {
-                editCustomer(event.getValue());
-            }
-        });
+        customerListing.asSingleSelect()
+                .addValueChangeListener(
+                        e -> {
+                            editCustomer(e.getValue());
+                        });
 
         /*
          * Configure the filter input and hook to text change events to
@@ -88,12 +82,10 @@ public class CustomerListView extends MVerticalLayout implements View {
          * events are sent to the server when e.g. user holds a tiny pause
          * while typing or hits enter.
          * */
-        filter.setInputPrompt("Filter customers...");
-        filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
-            @Override
-            public void textChange(FieldEvents.TextChangeEvent textChangeEvent) {
-                listCustomers(textChangeEvent.getText());
-            }
+        filter.setPlaceholder("Filter customers...");
+        filter.setValueChangeMode(ValueChangeMode.LAZY);
+        filter.addValueChangeListener(e -> {
+            listCustomers(e.getValue());
         });
 
 
@@ -105,15 +97,10 @@ public class CustomerListView extends MVerticalLayout implements View {
         /* If you wish the UI to adapt on window resize/page orientation
          * change, hook to BrowserWindowResizeEvent */
         UI.getCurrent().setResizeLazy(true);
-        Page.getCurrent().addBrowserWindowResizeListener(
-                new Page.BrowserWindowResizeListener() {
-                    @Override
-                    public void browserWindowResized(
-                            Page.BrowserWindowResizeEvent browserWindowResizeEvent) {
-                                adjustTableColumns();
-                                layout();
-                            }
-                });
+        Page.getCurrent().addBrowserWindowResizeListener(e -> {
+            adjustTableColumns();
+            layout();
+        });
 
         listCustomers();
     }
@@ -134,8 +121,8 @@ public class CustomerListView extends MVerticalLayout implements View {
         if (ScreenSize.getScreenSize() == ScreenSize.LARGE) {
             addComponents(
                     new MHorizontalLayout(header, filter, addButton)
-                    .expand(header)
-                    .alignAll(Alignment.MIDDLE_LEFT),
+                            .expand(header)
+                            .alignAll(Alignment.MIDDLE_LEFT),
                     mainContent
             );
 
@@ -144,8 +131,8 @@ public class CustomerListView extends MVerticalLayout implements View {
             addComponents(
                     header,
                     new MHorizontalLayout(filter, addButton)
-                    .expand(filter)
-                    .alignAll(Alignment.MIDDLE_LEFT),
+                            .expand(filter)
+                            .alignAll(Alignment.MIDDLE_LEFT),
                     mainContent
             );
         }
@@ -160,31 +147,19 @@ public class CustomerListView extends MVerticalLayout implements View {
      */
     private void adjustTableColumns() {
         if (ScreenSize.getScreenSize() == ScreenSize.LARGE) {
-            customerTable.setVisibleColumns("firstName", "lastName", "email",
+            customerListing.setColumns("firstName", "lastName", "email",
                     "status");
-            customerTable.setColumnHeaders("First name", "Last name", "Email",
-                    "Status");
         } else {
-            // Only show one (generated) column with combined first + last name
-            if (customerTable.getColumnGenerator("name") == null) {
-                customerTable.addGeneratedColumn("name",
-                        new Table.ColumnGenerator() {
-                            @Override
-                            public Object generateCell(Table table, Object o,
-                                    Object o2) {
-                                Customer c = (Customer) o;
-                                return c.getFirstName() + " " + c.getLastName();
-                            }
-                        });
-            }
+            customerListing.removeAllColumns();
+            customerListing.addColumn(c -> c.getFirstName() + " " + c.getLastName())
+                    .setCaption("Name");
             if (ScreenSize.getScreenSize() == ScreenSize.MEDIUM) {
-                customerTable.setVisibleColumns("name", "email");
-                customerTable.setColumnHeaders("Name", "Email");
-            } else {
-                customerTable.setVisibleColumns("name");
-                customerTable.setColumnHeaders("Name");
+                customerListing.addColumn("email");
             }
         }
+        // This call shouldn't be needed. A workaround to
+        // https://github.com/vaadin/framework/issues/8938
+        customerListing.getDataProvider().refreshAll();
     }
 
     /* ******* */
@@ -197,19 +172,19 @@ public class CustomerListView extends MVerticalLayout implements View {
         // Here we just fetch data straight from the EJB.
         //
         // If you expect a huge amount of data, do proper paging,
-        // or use lazy loading.
-        // See: https://github.com/viritin/viritin/wiki/Lazy-loading-in-Viritin
-        if(filter.getValue() == null) {
-            customerTable.setBeans(new ArrayList<>(service.findAll()));
-            customerTable.sort();
+        // using setDataProvider method, see:
+        // https://vaadin.com/blog/-/blogs/lazy-loading-with-vaadin-8
+        if (filter.getValue() == null) {
+            customerListing.setItems(new ArrayList<>(service.findAll()));
         } else {
             listCustomers(filter.getValue());
         }
     }
 
     private void listCustomers(String filterString) {
-        customerTable.setBeans(new ArrayList<>(service.findByName(filterString)));
-        customerTable.sort();
+        customerListing.setItems(new ArrayList<>(service.findByName(filterString)));
+        // TODO maintain sorting somehow
+        //customerTable.sort();
     }
 
     void editCustomer(Customer customer) {
@@ -225,6 +200,7 @@ public class CustomerListView extends MVerticalLayout implements View {
     }
 
     private void openEditor(Customer customer) {
+        customerEditor.setWidth("400px");
         customerEditor.setEntity(customer);
         // display next to table on desktop class screens
         if (ScreenSize.getScreenSize() == ScreenSize.LARGE) {
@@ -235,6 +211,7 @@ public class CustomerListView extends MVerticalLayout implements View {
             AppUI.get().getContentLayout().
                     replaceComponent(this, customerEditor);
         }
+        customerEditor.setVisible(true);
     }
 
     private void closeEditor() {
@@ -253,17 +230,20 @@ public class CustomerListView extends MVerticalLayout implements View {
      * example events are arised from CustomerForm. The CDI event system
      * is a great mechanism to decouple components.
      */
-    void saveCustomer(@Observes @CustomerEvent(Type.SAVE) Customer customer) {
+    void saveCustomer(@Observes
+            @CustomerEvent(Type.SAVE) Customer customer) {
         listCustomers();
         closeEditor();
     }
 
-    void resetCustomer(@Observes @CustomerEvent(Type.REFRESH) Customer customer) {
+    void resetCustomer(@Observes
+            @CustomerEvent(Type.REFRESH) Customer customer) {
         listCustomers();
         closeEditor();
     }
 
-    void deleteCustomer(@Observes @CustomerEvent(Type.DELETE) Customer customer) {
+    void deleteCustomer(@Observes
+            @CustomerEvent(Type.DELETE) Customer customer) {
         closeEditor();
         listCustomers();
     }

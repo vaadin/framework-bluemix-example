@@ -2,6 +2,7 @@ package org.vaadin.backend;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import java.time.LocalDate;
 import org.vaadin.backend.domain.Customer;
 import org.vaadin.backend.domain.CustomerStatus;
 import org.vaadin.backend.domain.Gender;
@@ -10,7 +11,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -72,10 +72,10 @@ public class CustomerService {
                         toLowerCase() + ".com");
                 c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.
                         values().length)]);
-                Calendar cal = Calendar.getInstance();
+                LocalDate d = LocalDate.now();
                 int daysOld = 0 - r.nextInt(365 * 15 + 365 * 60);
-                cal.add(Calendar.DAY_OF_MONTH, daysOld);
-                c.setBirthDate(cal.getTime());
+                d = d.plusDays(daysOld);
+                c.setBirthDate(d);
 
                 c.setGender(r.nextDouble() < 0.7 ? Gender.Female : Gender.Male);
 

@@ -1,14 +1,17 @@
 package org.vaadin.presentation.views;
 
-import com.vaadin.ui.*;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.NativeSelect;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.RadioButtonGroup;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.stream.Stream;
 import org.vaadin.backend.CustomerService;
 import org.vaadin.backend.domain.Customer;
 import org.vaadin.backend.domain.CustomerStatus;
 import org.vaadin.backend.domain.Gender;
-import org.vaadin.viritin.fields.MTextField;
-import org.vaadin.viritin.fields.TypedSelect;
-import org.vaadin.viritin.form.AbstractForm;
 import org.vaadin.viritin.label.Header;
 import org.vaadin.viritin.layouts.MFormLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
@@ -17,12 +20,14 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import org.vaadin.viritin.form.AbstractForm;
 
 /**
  * A UI component built to modify Customer entities. The used superclass
  * provides binding to the entity object and e.g. Save/Cancel buttons by
- * default. In larger apps, you'll most likely have your own customized super
- * class for your forms.
+ * default. You could naturally do this manually as well using buttons, layouts
+ * and Binder, but in larger apps, you'll most likely have your own customized
+ * super class for your forms.
  * <p>
  * Note, that the advanced bean binding technology in Vaadin is able to take
  * advantage also from Bean Validation annotations that are used also by e.g.
@@ -38,19 +43,23 @@ public class CustomerForm extends AbstractForm<Customer> {
 
     // Prepare some basic field components that our bound to entity property
     // by naming convetion, you can also use PropertyId annotation
-    TextField firstName = new MTextField("First name").withFullWidth();
-    TextField lastName = new MTextField("Last name").withFullWidth();
+    TextField firstName = new TextField("First name");
+    TextField lastName = new TextField("Last name");
     DateField birthDate = new DateField("Birth day");
     // Select to another entity, options are populated in the init method
-    TypedSelect<CustomerStatus> status = new TypedSelect().
-            withCaption("Status");
-    OptionGroup gender = new OptionGroup("Gender");
-    TextField email = new MTextField("Email").withFullWidth();
+    NativeSelect<CustomerStatus> status = new NativeSelect("Status");
+    RadioButtonGroup<Gender> gender = new RadioButtonGroup<>("Gender");
+    TextField email = new TextField("Email");
+
+    public CustomerForm() {
+        super(Customer.class);
+    }
 
     @Override
     protected Component createContent() {
-
         setStyleName(ValoTheme.LAYOUT_CARD);
+
+        Stream.of(firstName, lastName, email).forEach(t -> t.setWidth("100%"));
 
         return new MVerticalLayout(
                 new Header("Edit customer").setHeaderLevel(3),
@@ -68,46 +77,32 @@ public class CustomerForm extends AbstractForm<Customer> {
 
     @PostConstruct
     void init() {
-        setEagerValidation(true);
         status.setWidthUndefined();
-        status.setOptions(CustomerStatus.values());
-        gender.addItems((Object[]) Gender.values());
+        status.setItems(CustomerStatus.values());
+        gender.setItems(Gender.values());
         gender.setStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
-        setSavedHandler(new SavedHandler<Customer>() {
-
-            @Override
-            public void onSave(Customer entity) {
-                try {
-                    // make EJB call to save the entity
-                    service.saveOrPersist(entity);
-                    // fire save event to let other UI components know about
-                    // the change
-                    saveEvent.fire(entity);
-                } catch (EJBException e) {
-                    /*
-                     * The Customer object uses optimitic locking with the 
-                     * version field. Notify user the editing didn't succeed.
-                     */
-                    Notification.show("The customer was concurrently edited "
-                            + "by someone else. Your changes were discarded.",
-                            Notification.Type.ERROR_MESSAGE);
-                    refrehsEvent.fire(entity);
-                }
+        setSavedHandler(customer -> {
+            try {
+                // make EJB call to save the entity
+                service.saveOrPersist(customer);
+                // fire save event to let other UI components know about
+                // the change
+                saveEvent.fire(customer);
+            } catch (EJBException e) {
+                /*
+                * The Customer object uses optimitic locking with the
+                * version field. Notify user the editing didn't succeed.
+                 */
+                Notification.show("The customer was concurrently edited "
+                        + "by someone else. Your changes were discarded.",
+                        Notification.Type.ERROR_MESSAGE);
+                refrehsEvent.fire(customer);
             }
         });
-        setResetHandler(new ResetHandler<Customer>() {
-
-            @Override
-            public void onReset(Customer entity) {
-                refrehsEvent.fire(entity);
-            }
-        });
-        setDeleteHandler(new DeleteHandler<Customer>() {
-            @Override
-            public void onDelete(Customer entity) {
-                service.deleteEntity(getEntity());
-                deleteEvent.fire(getEntity());
-            }
+        setResetHandler(refrehsEvent::fire);
+        setDeleteHandler(customer -> {
+            service.deleteEntity(getEntity());
+            deleteEvent.fire(getEntity());
         });
     }
 

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * A standard JPA entity, like in any other Java application.
@@ -30,8 +30,7 @@ public class Customer implements Serializable {
 
     private String lastName;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date birthDate;
+    private LocalDate birthDate;
 
     private CustomerStatus status;
 
@@ -93,7 +92,7 @@ public class Customer implements Serializable {
      *
      * @return the value of birthDate
      */
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
@@ -102,7 +101,7 @@ public class Customer implements Serializable {
      *
      * @param birthDate new value of birthDate
      */
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
