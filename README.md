@@ -4,6 +4,8 @@ This is an example application that shows how your can build rich UIs for your B
 
 ### Automatic deployment to Bluemix
 
+Go to the Bluemix console. From the Catalog, choose ElephantSQL and create a service with name *vaadindb*. The free *tiny turtle* plan is fine for testing. Alternatively you can create a full execution environment from the Catalog, by choosing Vaadin boilerplate.
+
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy)
 
 When you click this button, Bluemix will clone this repository to a private Bluemix DevOps Services project, create a pipeline to compile the source, create the necessary database service (see `manifest.yml`) and then push the application.
@@ -12,7 +14,9 @@ To continue developing your app, clone the repository that was created for you f
 
 ### Manual deployment to Bluemix
 
-Before you start, make sure you have Java SDK 1.7 (or higher) and Maven installed. Also [install cloudfoundry command line tools](https://www.ng.bluemix.net/docs/#cli/index.html#cli) and configure them for Bluemix.
+Go to the Bluemix console. From the Catalog, choose ElephantSQL and create a service with name *vaadindb*. The free *tiny turtle* plan is fine for testing.
+
+Before you start, make sure you have Java SDK 1.8 (or higher) and Maven installed. Also [install cloudfoundry command line tools](https://console.ng.bluemix.net/docs/cli/index.html) and configure them for Bluemix.
 
 To build the project, just execute the following commands in order:
 
@@ -24,7 +28,7 @@ mvn install
 
 or execute the same goal via your IDE.
 
-In Bluemix you need to prepare an execution environment, that provides a Java EE 6 server and a database mapped to "jdbc/vaadindb". You can do this manually from the console with Liberty server and an ElephantSQL (PostgreSQL) database connected to it. Name the database "vaadindb" and Bluemix will automatically configure driver, DataSource and setup a proper JNDI entry the database.
+In Bluemix you need to prepare an execution environment, that provides a Java EE 7 server and a database mapped to "jdbc/vaadindb". You can do this manually from the console with Liberty server and an ElephantSQL (PostgreSQL) database connected to it. Name the database "vaadindb" and Bluemix will automatically configure driver, DataSource and setup a proper JNDI entry the database.
 
 Alternatively you can trust the magic in manifest.yml file to create the required execution environement.
 
@@ -73,7 +77,7 @@ If you are using Eclipse, it might be bit picky about configuring the project pr
 
 **The application doesn't build properly** 
 
-If you have [Maven](https://maven.apache.org/download.cgi) and Java 7 or later installed, the most common problem is that you are using a Macintosh and your JAVA_HOME environment variable still points to version 1.6 of Java. An easy way to fix this is executing: 
+If you have [Maven](https://maven.apache.org/download.cgi) and Java 8 or later installed, the most common problem is that you are using a Macintosh and your JAVA_HOME environment variable still points to version 1.6 of Java. An easy way to fix this is executing: 
 ```export JAVA_HOME=`/usr/libexec/java_home -v 1.7` ```
 and/or adding that to your .bash_profile file.
 
