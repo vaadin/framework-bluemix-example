@@ -80,14 +80,7 @@ public class CustomerListView extends MVerticalLayout implements View {
 
     Header header = new Header("Customers").setHeaderLevel(2);
 
-    Button addButton = new MButton(FontAwesome.EDIT,
-            new Button.ClickListener() {
-
-        @Override
-        public void buttonClick(Button.ClickEvent event) {
-            addCustomer();
-        }
-    });
+    Button addButton = new MButton(FontAwesome.EDIT, e -> addCustomer());
 
     @PostConstruct
     public void init() {
@@ -97,10 +90,7 @@ public class CustomerListView extends MVerticalLayout implements View {
          * an editor.
          */
         customerListing.asSingleSelect()
-                .addValueChangeListener(
-                        e -> {
-                            editCustomer(e.getValue());
-                        });
+                .addValueChangeListener(e -> editCustomer(e.getValue()));
 
         /*
          * Configure the filter input and hook to text change events to
@@ -110,9 +100,7 @@ public class CustomerListView extends MVerticalLayout implements View {
          * */
         filter.setPlaceholder("Filter customers...");
         filter.setValueChangeMode(ValueChangeMode.LAZY);
-        filter.addValueChangeListener(e -> {
-            listCustomers(e.getValue());
-        });
+        filter.addValueChangeListener(e -> listCustomers(e.getValue()));
 
 
         /* "Responsive Web Design" can be done with plain Java as well. Here we

@@ -79,13 +79,11 @@ public class MapView extends MVerticalLayout implements View {
         for (final Customer customer : service.findAll()) {
             if(customer.getLocation() != null) {
                 LMarker marker = new LMarker(customer.getLocation());
-                marker.addClickListener(new LeafletClickListener() {
-                    @Override
-                    public void onClick(LeafletClickEvent event) {
-                        Notification.show(
-                                "Customer: " + customer.getFirstName() + " " + customer.
-                                getLastName());
-                    }
+                marker.addClickListener(e -> {
+                    Notification.show(
+                        "Customer: " + customer.getFirstName() + " " + customer.
+                        getLastName()
+                    );
                 });
                 worldMap.addComponent(marker);
            }
