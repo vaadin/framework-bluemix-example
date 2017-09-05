@@ -21,8 +21,8 @@ Before you start, make sure you have Java SDK 1.8 (or higher) and Maven installe
 To build the project, just execute the following commands in order:
 
 ```
-git clone https://hub.jazz.net/git/vaadin/vaadin-jpa-app
-cd vaadin-jpa-app
+git clone https://github.com/vaadin/framework-bluemix-example
+cd framework-bluemix-example
 mvn install
 ```
 
